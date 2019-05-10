@@ -87,7 +87,7 @@ class SymbolFetcher:
         page_count = 1
         while True:
             async with aiohttp.ClientSession() as client:
-                async with client.get(f"{BAMBOO_RELAY_ENDPOINT}?perPage=100&page={page_count}", timeout=API_CALL_TIMEOUT) \
+                async with client.get(f"{BAMBOO_RELAY_ENDPOINT}?perPage=1000&page={page_count}", timeout=API_CALL_TIMEOUT) \
                         as response:
                     if response.status == 200:
                         try:

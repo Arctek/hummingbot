@@ -63,7 +63,7 @@ class BambooRelayAPIOrderBookDataSource(OrderBookTrackerDataSource):
         Returns all token information
         """
         client: aiohttp.ClientSession = cls.http_client()
-        async with client.get(TOKENS_URL) as response:
+        async with client.get(f"{TOKENS_URL}?perPage=1000") as response:
             response: aiohttp.ClientResponse = response
             if response.status != 200:
                 raise IOError(f"Error fetching token info. HTTP status is {response.status}.")
@@ -87,7 +87,7 @@ class BambooRelayAPIOrderBookDataSource(OrderBookTrackerDataSource):
             ]
             all_markets: pd.DataFrame = pd.DataFrame.from_records(data=data, index="id")
 
-            weth_dai_price: float = float(all_markets.loc["WETH-DAI"]["ticker"]["price"])
+            weth_dai_price: float = 1 / float(all_markets.loc["DAI-WETH"]["ticker"]["price"])
             dai_usd_price: float = ExchangeRateConversion.get_instance().adjust_token_rate("DAI", weth_dai_price)
             usd_volume: List[float] = []
             quote_volume: List[float] = []
